@@ -1,3 +1,7 @@
+<?php 
+	setcookie("uname", $_GET["uname"], time() + (60 * 60 * 24 * 7));
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +29,7 @@
 
 <h1>ClosedChatRoom</h1>
 <form action = "write.php">
-	<?php echo $_GET['uname']; ?>
+	<?php echo $_GET["uname"]; ?>
 	<input type = "hidden" name = "uname" value = "<?= $_GET['uname'] ?>">
 	<input type = "text" name = "msg">
 		<button>送信</button>
