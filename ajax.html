@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Ajaxのテスト
+	</title>
+</head>
+
+<body>
+
+<form> 
+	<button type = "button" id = "btn">送信</button>
+</form>
+
+<script>
+	var btn = document.querySelector("#btn");
+	btn.addEventListener("click", function(){
+		var request = new XMLHttpRequest();
+		
+		request.open("GET", "http://127.0.0.1/hello.php", false);
+		
+		request.onreadystatechange = function(){
+			if(request.status === 200 || request.status === 304){
+			
+				var response = request.responseText;
+				var json = JSON.parse(response);
+			
+				alert(json["message"]);
+			}
+			else if(request.status >= 500){
+				alert("ServerError");
+			}
+		};
+		
+		request.onerror = function(e){
+			console.log(e);
+		}
+		
+		request.send();
+	});
+</script>
+
+</body>
+</html>
