@@ -49,12 +49,13 @@ window.onload = function(){
 		if (request.status === 200 || request.status === 304 ) {
 			var response = request.responseText;
 			var json     = JSON.parse(response);
-		    if( json["status"] ){
-		    	getLog();
-		    }
-		    else{
-		    	alert("書き込みに失敗したよ");
-		    }
+			
+			if( json["head"]["status"] === false ){
+				alert("失敗しました");
+				return(false);	
+			}
+
+		    getLog();
 		}
 		else if(request.status >= 500){
 			alert("ServerError");
@@ -78,10 +79,15 @@ function getLog(){
 		if (request.status === 200 || request.status === 304 ) {
 			var response = request.responseText;
 			var json     = JSON.parse(response);
+			
+			if( json["head"]["status"] === false ){
+				alert("失敗しました");
+				return(false);	
+			}
 		
 			var html="";
-			for(i=0; i<json.length; i++){
-				html += json[i]["name"] +":"+ json[i]["message"] + "<br>";
+			for(i=0; i<json["body"].length; i++){
+				html += json["body"][i]["name"] +":"+ json["body"][i]["message"] + "<br>";
 			}
 			document.querySelector("#chatlog").innerHTML = html;
 		}

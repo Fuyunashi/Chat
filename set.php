@@ -1,25 +1,9 @@
 <?php
 require('lib.php');
 
-$uname = $_POST["uname"];
-$msg   = $_POST["msg"];
-$time  = time();
+$name    = $_POST["uname"];
+$message = $_POST["msg"];
 
-/**
- * MySQLに接続しデータを追加する
- * 
- */
+$chat = new ChatAPI();
+$chat->set($name, $message);
 
-// 実行したいSQL
-$sql = 'INSERT INTO log(name,message,time) VALUES(?,?,?)';
-
-//-------------------------------------------------
-//SQLを実行
-//-------------------------------------------------
-$dbh = connectDB();   //接続
-$sth = $dbh->prepare($sql);         //SQL準備
-$sth->execute([$uname,$msg,date("Y-m-d H:i:s",$time)]);  //実行
-
-echo json_encode([
-	"status"=>true
-]);
