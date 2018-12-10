@@ -7,7 +7,7 @@
 
 <h1>ログイン</h1>
 <form action="chat.php">
-	ID:<input type="text" name="uname" value="<?= $_COOKIE['id'] ?>"><br>
+	ID:<input type="text" name="id" value="<?= $_COOKIE['id'] ?>"><br>
 	PW:<input type="password" name="pw"><br>
 	<button>ログイン</button>
 </form>

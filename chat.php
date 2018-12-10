@@ -1,5 +1,9 @@
 <?php
-	setcookie("uname", $_GET["uname"], time()+(60*60*24*7))
+	setcookie("uname", $_GET["uname"], time()+(60*60*24*7));
+	
+	$id = $_POST["id"];
+	$pw = $_POST["pw"];
+	
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -37,14 +41,16 @@
 
 <script>
 window.onload = function(){
+  auth();
+  
+  
   getLog();
-	
   document.querySelector("#sbmt").addEventListener("click",function(){
     var uname = document.querySelector("#uname").value;
     var msg   = document.querySelector("#msg").value;
 
     var request = new XMLHttpRequest();
-    request.open('POST', 'http://127.0.0.1/chat2/set.php', false);
+    request.open('POST', 'http://127.0.0.1/chat/set.php', false);
     request.onreadystatechange = function(){
 		if (request.status === 200 || request.status === 304 ) {
 			var response = request.responseText;
@@ -68,12 +74,38 @@ window.onload = function(){
     	  "uname=" + encodeURIComponent(uname) + "&"
     	+ "msg="   + encodeURIComponent(msg)
     );
-  })
 };
+
+function auth(){
+  var request = new XMLHttpRequest();
+  request.open('POST', 'http://127.0.0.1/chat/auth.php', false);
+  request.onreadystatechange = function(){
+	if (request.status === 200 || request.status === 304 ) {
+		var response = request.responseText;
+		var json     = JSON.parse(response);
+		
+		if( json["head"]["status"] === false ){
+			alert("ログインに失敗しました");
+			location.href = "/chat/";
+		}
+		else{
+			alert("ログインに成功しました");
+		}
+		
+		return(  );
+      }
+   };
+  
+  request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  request.send(
+    	  "id=" + encodeURIComponent("<?php echo $id; ?>") + "&"
+    	+ "pw=" + encodeURIComponent("<?php echo $pw; ?>")
+   );
+}
 
 function getLog(){
 	var request = new XMLHttpRequest();	
-	request.open('GET', 'http://127.0.0.1/chat2/get.php', false);
+	request.open('GET', 'http://127.0.0.1/chat/get.php', false);
 
 	request.onreadystatechange = function(){
 		if (request.status === 200 || request.status === 304 ) {
