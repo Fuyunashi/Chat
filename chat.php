@@ -95,6 +95,7 @@ function auth(){
    };
 
   request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  
   request.send(
     	  "id=" + encodeURIComponent("<?php echo $id; ?>") + "&"
     	+ "pw=" + encodeURIComponent("<?php echo $pw; ?>")

@@ -107,8 +107,8 @@ class ChatAPI extends APIBase{
 			$sth->execute([  						 //実行
 					  $_SESSION['id']
 					, $message
-					, date("Y-m-d H:i:s", time())]
-			);
+					, date("Y-m-d H:i:s", time())
+			]);
 			$dbh->commit();
 			$flag = true;
 		}
