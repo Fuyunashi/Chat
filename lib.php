@@ -24,28 +24,27 @@ class APIBase{
 class ChatAPI extends APIBase{
 	function auth($id, $pw){
 		$sql = "SELECT user_id, pw, name FROM user WHERE user_id=?";
-		
+
 		try{
-			$dbh = connectDB();                //接続
-			$sth = $dbh->prepare($sql);        //SQL準備
-			$sth->execute($value);             //実行
-			$buff = $sth->fetch(PDO::FETCH_ASSOC);
-			
-			if( $buff && $buff["pw"] === $pw ){
-				session_start();
-				$_SESSION['id'] = $id;
-				$_SESSION['name'] = $buff['name'];
-				$flag = true;
-			}
-			else{
-				$flag = false;
-			}
-			
+			$dbh = connectDB();   //接続
+			$sth = $dbh->prepare($sql);            //SQL準備
+			$sth->execute([$id]);                  //実行
+		   $buff = $sth->fetch(PDO::FETCH_ASSOC);
+		   
+		   if( $buff && $buff["pw"] === $pw){
+		   		session_start();
+		   		$_SESSION['id']   = $id;
+		   		$_SESSION['name'] = $buff['name'];		   		
+		   		$flag = true;
+		   }
+		   else{
+		   		$flag = false;
+		   }
 		}
 		catch( PDOException $e ){
 			$flag = false;
 		}
-		
+
 		$this->sendjson($flag);
 	}
 
@@ -54,7 +53,9 @@ class ChatAPI extends APIBase{
 		$value = [];
 
 		if($name === null){
-			$sql = 'SELECT * FROM log';
+			$sql =    'SELECT name, message, log.time '
+			        . 'FROM   log, user '
+			        . 'WHERE  log.user_id=user.user_id';
 		}
 		else{
 			$sql = "SELECT * FROM log WHERE name=?";
@@ -93,13 +94,12 @@ class ChatAPI extends APIBase{
 
 	function set($message){
 		session_start();
-		if( array_key_exist('id', $_SESSION)){
+		if( !array_key_exists('id', $_SESSION) ){
 			$this->sendjson(false);
 			return(false);
 		}
-		
-		$sql = 'INSERT INTO log(user_id,message,time) VALUES(?,?,?)';
 
+		$sql = 'INSERT INTO log(user_id,message,time) VALUES(?,?,?)';
 		try{
 			$dbh = connectDB();                 //接続
 			$dbh->beginTransaction();
