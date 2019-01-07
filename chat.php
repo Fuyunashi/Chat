@@ -69,6 +69,23 @@ window.onload = function(){
 
        request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
+		//禁則処理
+		if(msg == "fuck" || msg == "Fuck" || msg == "FUCK" || msg == "Fuck" ||
+		   msg == "suck" || msg == "Suck" || msg == "SUCK" || msg == "タヒネ")
+		{
+			msg = "****";
+		}
+		else if(msg == "fucker" || msg == "Fucker" || msg == "FUCKER" ||
+			    msg == "sucker" || msg == "fuckin" || msg == "Fuckin" ||
+			    msg == "FUCKIN" || msg == "Sucker" || msg == "SUCKER" )
+		{
+			msg == "******";
+		}
+		else if(msg == "死ね" || msg == "しね" || msg == "シネ" || msg == "殺す")
+		{
+			msg == "**";
+		}
+
        request.send(
     	    "uname=" + encodeURIComponent(uname) + "&"
     	  + "msg="   + encodeURIComponent(msg)
